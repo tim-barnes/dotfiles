@@ -1,6 +1,4 @@
 .bashrc
-.gitconfig
 .git-prompt.sh
-Templates
 .vim
 .vimrc
