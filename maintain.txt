@@ -1,4 +1,4 @@
-.bashrc
-.git-prompt.sh
-.vim
-.vimrc
+bashrc
+git-prompt.sh
+vim
+vimrc
