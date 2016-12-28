@@ -127,18 +127,16 @@ export PATH="$PATH:~/Tools"
 # Find a file with a pattern in name:
 function ff() { find . -type f -iname '*'"$*"'*' -ls ; }
 
-
-#TrueAI specific environment settings
-export TRUEAI=/home/tim/Work/trueai_services
-export PYTHONPATH="${PYTHONPATH}:${TRUEAI}"
-
-#Useful git aliases
+# Useful git aliases
 alias glog="git log --oneline --graph"
 
-# TrueAI aliases
-sudo sysctl -w vm.max_map_count=262144
-alias testbash="pushd $TRUEAI && docker-compose -f docker-compose.yml -f docker-compose.test.yml run test bash && popd"
-alias run_tests="pushd $TRUEAI && sudo ./scripts/run_tests.sh && popd"
-
-
+# Fixes irritating problem with Dell XPS 15 wifi when coming back 
+# from sleep
+# This is a backup for the wifi_restart script in /lib/systemd/system-sleep
 alias wififix="sudo service network-manager restart"
+
+# Add in dev specific stuff
+if [ -f ~/.dev ]; then
+    . ~/.dev
+fi
+

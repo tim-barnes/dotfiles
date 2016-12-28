@@ -2,3 +2,5 @@ bashrc
 git-prompt.sh
 vim
 vimrc
+fonts
+
