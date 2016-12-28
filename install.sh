@@ -13,7 +13,7 @@ while read file; do
     
         # If source file does not exist, copy it here
         if [ ! -e $source/$file ]; then
-            cp $backup/$file $source/$file
+            cp -R $backup/$file $source/$file
         fi
     fi
 
