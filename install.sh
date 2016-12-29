@@ -19,7 +19,7 @@ while read file; do
 
     # Create the link - delete if already broken
     if [ ! -e "~/.$file" ]; then
-        rm ~/.$file
+        rm -f ~/.$file
     fi
     ln -s $source/$file ~/.$file
 done < maintain.txt

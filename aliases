@@ -1,0 +1,21 @@
+alias ll="ls -lv --group-directories-first"
+
+export PATH="$PATH:~/Tools"
+
+
+# Find a file with a pattern in name:
+function ff() { find . -type f -iname '*'"$*"'*' -ls ; }
+
+# Useful git aliases
+alias glog="git log --oneline --graph"
+
+# Fixes irritating problem with Dell XPS 15 wifi when coming back 
+# from sleep
+# This is a backup for the wifi_restart script in /lib/systemd/system-sleep
+alias wififix="sudo service network-manager restart"
+
+# Add in dev specific stuff
+if [ -f ~/.dev ]; then
+    source ~/.dev
+fi
+

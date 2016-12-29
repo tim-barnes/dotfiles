@@ -3,3 +3,5 @@ git-prompt.sh
 vim
 vimrc
 fonts
+aliases
+zshrc
