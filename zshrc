@@ -4,10 +4,14 @@
 # Path to your oh-my-zsh installation.
   export ZSH=/home/tim/.oh-my-zsh
 
+# Default user - so this is not shown in the prompt  
+export DEFAULT_USER=$USER
+
+
 # Set name of the theme to load. Optionally, if you set this to "random"
 # it'll load a random theme each time that oh-my-zsh is loaded.
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
-ZSH_THEME="agnoster"
+ZSH_THEME="agnoster-tim"
 
 # Uncomment the following line to use case-sensitive completion.
 # CASE_SENSITIVE="true"
