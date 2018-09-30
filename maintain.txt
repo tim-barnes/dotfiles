@@ -1,8 +1,0 @@
-bashrc
-git-prompt.sh
-vim
-vimrc
-fonts
-aliases
-zshrc
-oh-my-zsh

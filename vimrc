@@ -29,12 +29,12 @@ Plugin 'VundleVim/Vundle.vim'
 
 Plugin 'davidhalter/jedi-vim'
 Plugin 'scrooloose/syntastic'
-Plugin 'nvie/vim-flake8'
 Plugin 'scrooloose/nerdtree'
 Plugin 'tpope/vim-fugitive'
 Plugin 'Lokaltog/powerline', {'rtp': 'powerline/bindings/vim/'}
 Plugin 'aklt/plantuml-syntax'
-Plugin 'scrooloose/vim-slumlord'
+Plugin 'pangloss/vim-javascript'
+Plugin 'mxw/vim-jsx'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -54,13 +54,17 @@ let python_hightlight_all=1
 syntax on
 
 " Enable code styling in markdown
-let g:markdown_fenced_languages = ['html', 'python', 'bash=sh']
+let g:markdown_fenced_languages = ['html', 'python', 'bash=sh', 'json', 'javascript', 'yaml']
 
-" PlantUML location
-let g:plantuml_executable_script='java -jar ~/Tools/plantuml.jar'
-nnoremap <F5> :w<CR> :silent make<CR>
-inoremap <F5> <Esc>:w<CR>:silent make<CR>
-vnoremap <F5> :<C-U>:w<CR>:silent make<CR>
+" Set the max line length for pylint
+let g:syntastic_python_pylint_post_args="--max-line-length=120"
+" let g:syntastic_python_flake8_args='--ignore=E501'
+let g:syntastic_python_python_exec = 'python3'
+let g:syntastic_python_pylint_exec = 'pylint3'
+let g:syntastic_python_checkers = ['python', 'pylint3', 'flake8']
+let g:syntastic_javascript_checkers = ['eslint']
+let g:syntastic_aggregate_errors = 1
+
 
 " Nerd tree hide files
 let NERDTreeIgnore=['\.pyc$', '\~$'] "ignore files in NERDTree
@@ -82,7 +86,12 @@ set tabstop=4
 set expandtab
 set shiftwidth=4
 
-au FileType yml setl sw=2 sts=2 et
+" Highlight search results
+set hlsearch
+
+" Override indent for yaml and html
+autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab
+autocmd FileType html setlocal ts=2 sts=2 sw=2 expandtab
 
 vmap <Tab> >gv
 vmap <S-Tab> <gv
@@ -99,3 +108,10 @@ map <F6> :silent call <SID>StripTrailingWhitespaces()<cr>
 
 " Show syntastic errors on hitting F8
 map <F8> :Errors<cr>
+
+" Controls tabbing
+map <A-up> :tabr<cr>
+map <A-down> :tabl<cr>
+map <A-left> :tabp<cr>
+map <A-right> :tabn<cr>
+map <A-P> :tabnew<cr>
