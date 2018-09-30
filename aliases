@@ -1,6 +1,13 @@
+if [ -f /usr/share/powerline/bindings/bash/powerline.sh ]; then
+    source /usr/share/powerline/bindings/bash/powerline.sh
+fi
+
 alias ll="ls -lv --group-directories-first"
 
 export PATH="$PATH:$HOME/Tools"
+export GOPATH=/usr/local/go/bin
+export PATH=$GOPATH:$GOPATH/bin:$PATH
+export PATH=~/miniconda3/bin:$PATH
 
 
 # Find a file with a pattern in name:
@@ -9,44 +16,20 @@ function ff() { find . -type f -iname '*'"$*"'*' -ls ; }
 # Useful git aliases
 alias glog="git log --oneline --graph"
 
-# Fixes irritating problem with Dell XPS 15 wifi when coming back 
-# from sleep
-# This is a backup for the wifi_restart script in /lib/systemd/system-sleep
-alias wififix="sudo service network-manager restart"
-
 # Add in dev specific stuff
 if [ -f ~/.dev ]; then
     source ~/.dev
 fi
 
 alias python=python3
+alias pip=pip3
 alias vim="vim -p"
 
 setopt pushdsilent
 
-function remk 
-{
-    pushd ~/Tools/remarkable-linux-client-0.0.5-16-1408-g7eca2b66
-    ./reMarkable.sh > remarkable.log 2>&1  &
-    popd
-}
-
-alias todo="topydo -t ~/gdrive/todo/todo.txt -d ~/gdrive/todo/done.txt"
-alias todopull="pushd ~/gdrive && drive pull -quiet todo && popd"
-alias todopush="pushd ~/gdrive && drive push -quiet todo && popd"
-
-export TODOTXT_DEFAULT_ACTION=ls
-
-export GOPATH=$HOME/Tools/gopath
-export PATH=$GOPATH:$GOPATH/bin:$PATH
 
 # Kubernetes usefulness
 eval $(kubectl completion zsh)
-alias kubecpu="kubectl config use-context kube-a-dev-cpu-1222ed"
-alias kubegpu="kubectl config use-context kube-a-dev-gpu-1222edmgmt"
-alias kubestag="kubectl config use-context kube-b-staging-gpu-1222edmgmt"
-alias kubeprod="kubectl config use-context kube-c-production-gpu-1222edmgmt"
-alias kubectx="kubectl config current-context"
 
 # Shells into a service on the current kubernetes cluster
 function kubesh {
@@ -64,3 +47,48 @@ function kubelog {
 
     kubectl logs $FOLLOW $(kubectl get po | grep $service | awk '{ print $1 }')
 }
+
+function kubectx {
+    kubectl config current-context | cut -d'-' -f3 | figlet -t -c -f banner
+}
+
+function clu {
+  tmux new-session \; \
+      send-keys 'watch -td kubectl get po' C-m \; \
+      split-window -v -p 60 \; \
+      select-pane -t 0 \; \
+      split-window -h -p 40 \; \
+      send-keys 'watch -t zsh --interactive -c kubectx' C-m \; \
+      split-window -v -p 50\; \
+      resize-pane -t 1 -y 8 \; \
+      send-keys 'watch -td kubectl get nodes' C-m \; \
+      select-pane -t 3 \;
+}
+
+function exi {
+    # Always revert back to dev cluster on exit - prevents accidents
+    kubegpu
+
+    if [ -n "$TMUX" ]; then
+        tmux kill-session
+    else
+        exit
+    fi
+} 
+
+killjobs () {
+
+    local kill_list="$(jobs)"
+    if [ -n "$kill_list" ]; then
+        # this runs the shell builtin kill, not unix kill, otherwise jobspecs cannot be killed
+        # the `$@` list must not be quoted to allow one to pass any number parameters into the kill
+        # the kill list must not be quoted to allow the shell builtin kill to recognise them as jobspec parameters
+        kill $@ $(sed --regexp-extended --quiet 's/\[([[:digit:]]+)\].*/%\1/gp' <<< "$kill_list" | tr '\n' ' ')
+    else
+        return 0
+    fi
+
+}
+
+alias ppjson="python -c 'import json; import sys; print(json.dumps(json.load(sys.stdin), indent=4))'"
+

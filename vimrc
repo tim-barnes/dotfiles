@@ -29,12 +29,13 @@ Plugin 'VundleVim/Vundle.vim'
 
 Plugin 'davidhalter/jedi-vim'
 Plugin 'scrooloose/syntastic'
-Plugin 'scrooloose/nerdtree'
 Plugin 'tpope/vim-fugitive'
 Plugin 'Lokaltog/powerline', {'rtp': 'powerline/bindings/vim/'}
 Plugin 'aklt/plantuml-syntax'
 Plugin 'pangloss/vim-javascript'
 Plugin 'mxw/vim-jsx'
+Plugin 'mhinz/vim-signify'
+Plugin 'elixir-editors/vim-elixir'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -61,17 +62,13 @@ let g:syntastic_python_pylint_post_args="--max-line-length=120"
 " let g:syntastic_python_flake8_args='--ignore=E501'
 let g:syntastic_python_python_exec = 'python3'
 let g:syntastic_python_pylint_exec = 'pylint3'
-let g:syntastic_python_checkers = ['python', 'pylint3', 'flake8']
+let g:syntastic_python_checkers = ['python', 'flake8']
 let g:syntastic_javascript_checkers = ['eslint']
 let g:syntastic_aggregate_errors = 1
 
-
-" Nerd tree hide files
-let NERDTreeIgnore=['\.pyc$', '\~$'] "ignore files in NERDTree
-map <C-n> :NERDTreeToggle
-
-
+" Line numbers and git status 
 set nu
+
 set mouse=a
 
 set laststatus=2
@@ -85,9 +82,13 @@ set wildmenu
 set tabstop=4
 set expandtab
 set shiftwidth=4
+set tabpagemax=100
 
 " Highlight search results
 set hlsearch
+
+" Auto cd to file directory
+set autochdir
 
 " Override indent for yaml and html
 autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab
@@ -115,3 +116,7 @@ map <A-down> :tabl<cr>
 map <A-left> :tabp<cr>
 map <A-right> :tabn<cr>
 map <A-P> :tabnew<cr>
+
+nnoremap <silent><Leader><C-]> <C-w><C-]><C-w>T
+
+set tags=./tags;$HOME
